@@ -1,0 +1,18 @@
+{
+  "name": "nodegui-deb-builder",
+  "version": "1.0.0",
+  "description": "DEB package generator for Linux. (For nodegui-starter & nodegui-mvc-starter)",
+  "main": "./dist/build-deb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TeckFreak",
+  "repository": {
+    "url": "https://github.com/RinneganTech/nodegui-deb-builder"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^13.13.4",
+    "typescript": "^3.8.3"
+  }
+}
