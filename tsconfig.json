@@ -3,7 +3,7 @@
     "incremental": true,
     "target": "es2016",
     "module": "commonjs",
-    "allowJs": true,
+    "allowJs": false,
     "checkJs": false,
     "outDir": "./dist/",
     "rootDir": "./src/",
