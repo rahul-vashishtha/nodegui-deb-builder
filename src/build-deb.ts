@@ -49,7 +49,35 @@ function createSymlinkToBin(): void {
 
 function copyDesktopFileToApplications(): void {
     console.log("Copying Desktop File:");
-    console.log(process.execSync('cp "' + path.join(buildFolder, getFilesFromPath(buildFolder, '.desktop')[0]) + '" "' + path.join(debStructDir, 'usr', 'share', 'applications', appName.replace(' ', '').toLowerCase() + '.desktop"')));
+    const desktopSrc = path.join(buildFolder, getFilesFromPath(buildFolder, '.desktop')[0])
+    const desktopDest = path.join(debStructDir, 'usr', 'share', 'applications', appName.replace(' ', '').toLowerCase() + '.desktop')
+    console.log(process.execSync('cp "' + desktopSrc + '" "' + desktopDest + '"'));
+
+    // Copy icon and change relative Icon path to absolute path
+    const desktopContents = fs.readFileSync(desktopDest).toString()
+    let m;
+
+    const regex = /^Icon=(.*)$/m;
+    const matches = regex.exec(desktopContents)
+    if (matches && matches.length > 1) {
+        const iconFileName = matches[1];
+        if (!path.isAbsolute(iconFileName)) {
+            // check if file exists, look for extensions {.png,.svg,.svgz,.xpm} as @nodegui/packer does
+            let iconFileExt = '';
+            for (const fileExt of ['png', 'svg', 'svgz', 'xpm']) {
+                if (fs.existsSync(path.join(path.dirname(desktopSrc), iconFileName + '.' + fileExt))) {
+                    iconFileExt = fileExt
+                    break;
+                }
+            }
+            if (!iconFileExt) {
+                throw new Error(iconFileName + '{.png,.svg,.svgz,.xpm} defined in desktop file but not found in ' + path.dirname(desktopSrc));
+            }
+            const absIconPath = '/' + path.join('usr', 'lib', appNameSanitized, iconFileName + '.' + iconFileExt)
+            fs.writeFileSync(desktopDest, desktopContents.replace(regex, 'Icon=' + absIconPath))
+            console.log('Adjusted relative icon path: ' + iconFileName + ' => ' + absIconPath)
+        }
+    }
 }
 
 function createDeb(): void {
