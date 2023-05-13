@@ -6,7 +6,7 @@ _Note: (As of now) This deb builder generates debian according to the structure 
 
 ## Building Source
 
--   Clone the repository: `git clone https://github.com/RinneganTech/nodegui-deb-builder.git`
+-   Clone the repository: `git clone https://github.com/rahul-vashishtha/nodegui-deb-builder.git`
 -   Install required packages using `npm install`
 -   Transpile the source by running `tsc`
 
